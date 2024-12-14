@@ -1,37 +1,16 @@
 pipeline {
     agent any
 
-    environment {
-        SONAR_HOST_URL = 'http://localhost:9000' // Replace with your SonarQube server URL
-        SONAR_TOKEN = credentials('sq1') // 'sq1' is the credential ID for the SonarQube token
-        GIT_REPO = 'https://github.com/saravanan2024chennai/sonardemo.git' // Replace with your GitHub URL
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                git url: "${GIT_REPO}", branch: 'main' // Change 'main' to your branch if necessary
-            }
-        }
-
         stage('Build') {
             steps {
-                script {
-                    // Use Maven or Gradle to build the project
-                    sh './mvnw clean install' // Adjust if you're using Maven wrapper, use 'mvn clean install' if Maven is globally available
-                }
+                sh 'mvn clean install' 
             }
         }
-
-       
-    }
-
-    post {
-        success {
-            echo 'Build and SonarQube analysis completed successfully.'
-        }
-        failure {
-            echo 'Build or SonarQube analysis failed.'
+        stage('SonarQube Analysis') {
+            steps {
+                sh 'mvn sonar:sonar' 
+            }
         }
     }
 }
