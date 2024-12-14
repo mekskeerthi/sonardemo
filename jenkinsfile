@@ -1,19 +1,37 @@
 pipeline {
-  agent any
-  
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))  // Keep the last 5 builds
-  }
-  
-  stages {
-    
-    stage('Build and SonarQube Scan') {
-      steps {
-        // Ensure the Maven Wrapper is available and runs successfully
-        withSonarQubeEnv(installationName: 'sq1') {
-          sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
-        }
-      }
+    agent any
+
+    environment {
+        SONAR_HOST_URL = 'http://localhost:9000' // Replace with your SonarQube server URL
+        SONAR_TOKEN = credentials('sq1') // 'sq1' is the credential ID for the SonarQube token
+        GIT_REPO = 'https://github.com/saravanan2024chennai/sonardemo.git' // Replace with your GitHub URL
     }
-  }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: "${GIT_REPO}", branch: 'main' // Change 'main' to your branch if necessary
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Use Maven or Gradle to build the project
+                    sh './mvnw clean install' // Adjust if you're using Maven wrapper, use 'mvn clean install' if Maven is globally available
+                }
+            }
+        }
+
+       
+    }
+
+    post {
+        success {
+            echo 'Build and SonarQube analysis completed successfully.'
+        }
+        failure {
+            echo 'Build or SonarQube analysis failed.'
+        }
+    }
 }
