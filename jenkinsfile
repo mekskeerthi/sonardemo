@@ -18,7 +18,7 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     sh 'mvn sonar:sonar \
                         -Dsonar.host.url=http://localhost:9000/\
-                        -Dsonar.login=${squ_9357f8f125890b1c8e7a6563f4dd0cfa52ef251c}' 
+                        -Dsonar.token=${squ_9357f8f125890b1c8e7a6563f4dd0cfa52ef251c}' 
                 }
             }
         }
