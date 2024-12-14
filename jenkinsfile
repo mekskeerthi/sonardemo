@@ -1,12 +1,15 @@
 pipeline {
+  agent any  // This allows the pipeline to run on any available agent (including the master node)
   
   options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
+    buildDiscarder(logRotator(numToKeepStr: '5'))  // Keep the last 5 builds
   }
+  
   stages {
     stage('Scan') {
       steps {
-        withSonarQubeEnv(installationName: 'sq1') { 
+        // Set up the SonarQube environment and run the SonarQube analysis
+        withSonarQubeEnv(installationName: 'sq1') {
           sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
         }
       }
