@@ -15,10 +15,11 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Configure SonarQube Scanner
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('sq1') {
                     sh 'mvn sonar:sonar \
                         -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.token=squ_9357f8f125890b1c8e7a6563f4dd0cfa52ef251c' 
+                         -Dsonar.login=${jenkins-sonar}' 
+                         
                 }
             }
         }
