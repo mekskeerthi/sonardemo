@@ -26,13 +26,15 @@ pipeline {
     }
      post {
         success {
-            emailext(
+            emailext(                
+                to: "${DEFAULT_RECIPIENTS}",
                 subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "The build was successful. See details at: ${env.BUILD_URL}"
             )
         }
         failure {
             emailext(
+                to: "${DEFAULT_RECIPIENTS}",
                 subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "The build failed. See details at: ${env.BUILD_URL}"
             )
