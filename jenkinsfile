@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/saravanan2024chennai/sonardemo.git' 
+                git branch: 'main', url: 'https://github.com/mekskeerthi/sonardemo.git' 
             }
         }
         stage('Build') {
@@ -15,10 +15,10 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Configure SonarQube Scanner
-                withSonarQubeEnv('sq1') {
+                withSonarQubeEnv('sonarserver') {
                     sh 'mvn sonar:sonar \
                         -Dsonar.host.url=http://localhost:9000 \
-                         -Dsonar.token='squ_a55495fafd9c407a248263fe8b2de9d89da8b912' 
+                         -Dsonar.token=squ_a55495fafd9c407a248263fe8b2de9d89da8b912' 
                          
                 }
             }
